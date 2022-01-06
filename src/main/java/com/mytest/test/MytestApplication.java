@@ -59,27 +59,27 @@ public class MytestApplication {
                 "</html>\n";
     }
 
-//    @GetMapping("/{fileName}")
-//    @ResponseBody
-//    public ResponseEntity<Object> downloadFile(@PathVariable(name = "fileName") String fileName) throws IOException {
-//
-//        String filePath = "/Users/zhanghq/Desktop/mytest/"+fileName;
-//        FileSystemResource resource = new FileSystemResource(filePath);
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add ( "Content-Disposition",String.format("attachment;filename=\"%s",fileName));
-//        headers.add ( "Cache-Control","no-cache,no-store,must-revalidate" );
-//        headers.add ( "Pragma","no-cache" );
-//        headers.add ( "Expires","0" );
-//
-//        ResponseEntity<Object> responseEntity = ResponseEntity.ok()
-//                .headers ( headers )
-//                .contentLength ( resource.contentLength())
-//                .contentType(MediaType.parseMediaType ( "application/octet-stream" ))
-//                .body(new InputStreamResource(resource.getInputStream()));
-//
-//        return responseEntity;
-//    }
+    @GetMapping("/download/{fileName}")
+    @ResponseBody
+    public ResponseEntity<Object> downloadFile(@PathVariable(name = "fileName") String fileName) throws IOException {
+
+        String filePath = "/Users/zhanghq/Desktop/mytest/"+fileName;
+        FileSystemResource resource = new FileSystemResource(filePath);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add ( "Content-Disposition",String.format("attachment;filename=\"%s",fileName));
+        headers.add ( "Cache-Control","no-cache,no-store,must-revalidate" );
+        headers.add ( "Pragma","no-cache" );
+        headers.add ( "Expires","0" );
+
+        ResponseEntity<Object> responseEntity = ResponseEntity.ok()
+                .headers ( headers )
+                .contentLength ( resource.contentLength())
+                .contentType(MediaType.parseMediaType ( "application/octet-stream" ))
+                .body(new InputStreamResource(resource.getInputStream()));
+
+        return responseEntity;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(MytestApplication.class, args);
