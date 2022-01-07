@@ -1,25 +1,34 @@
 package com.mytest.test;
 
+import org.apache.kafka.clients.admin.NewTopic;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.config.TopicBuilder;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @RestController
 @SpringBootApplication
 public class MytestApplication {
 
+    private static ApplicationContext applicationContext;
+
     @RequestMapping("/")
     public String index() {
+        KafkaTemplate template = applicationContext.getBean(KafkaTemplate.class);
+        template.send("topic1", "Hello Kafka");
         return "Hello, Spring Boot";
     }
 
@@ -82,7 +91,29 @@ public class MytestApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(MytestApplication.class, args);
+        SpringApplication application = new SpringApplication(MytestApplication.class);
+        application.setBannerMode(Banner.Mode.OFF);
+        applicationContext = application.run(args);
     }
+
+//    @Bean
+//    public NewTopic topic() {
+//        return TopicBuilder.name("topic1")
+//                .partitions(10)
+//                .replicas(1)
+//                .build();
+//    }
+//
+//    @KafkaListener(id = "myId", topics = "topic1")
+//    public void listen(String in) {
+//        System.out.println(in);
+//    }
+
+//    @Bean
+//    public ApplicationRunner runner(KafkaTemplate<String, String> template) {
+//        return args -> {
+//            template.send("topic1", "test");
+//        };
+//    }
 
 }
